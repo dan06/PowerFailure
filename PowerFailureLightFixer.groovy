@@ -25,37 +25,27 @@ preferences {
     }
 }
 
-def installed() {
+def installed() 
+{
 	init()
 }
 
-def updated() {
+def updated() 
+{
 	unsubscribe()
 	init()
 }
 
-def init() {
+def init() 
+{
 	subscribe(offSwitches, "switch.on", switchedOn)
 }
 
-def switchedOn(evt) {
-	if ( offSwitches ) {
-        if (monitorSwitch.state == 
+def switchedOn(evt) 
+{
+    def powerFailed = monitorSwitch.latestState("switch").value == "on"
+    if ( powerFailed && offSwitches ) 
+    {
     	offSwitches.off()
     }
-    
-    if ( onSwitches ) {
-    	log.debug "restoring Hues"
-        def ss = getSunriseAndSunset()
-        def now = new Date()
-		def dark = ss.sunset
-        if ( dark.before(now) ) {
-    		onSwitches.on()
-        }    
-    }
-    
-    if ( onAllwaysSwitches ) {
-    	log.debug "Always turn on"
-    	onAllwaysSwitches.on()
-	}
 }
