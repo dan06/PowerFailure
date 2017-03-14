@@ -27,6 +27,7 @@ preferences {
     section("Make changes to the following when powered is restored..."){
     	input "offSwitches", "capability.switch", title: "Turn these off", required: false, multiple: true
     	input "onSwitches", "capability.switch", title: "Turn these on if after sunset", required: false, multiple: true
+	    input "onAllwaysSwitches", "capability.switch", title: "Turn these on always", required: false, multiple: true
     }
 }
 
@@ -65,12 +66,12 @@ def powerOn(evt) {
     if ( phone1 && pushAndPhone ) {
     	log.debug "sending SMS to ${phone1}"
     	sendSms(phone1, msg)
-	}
+    }
     
     if ( offSwitches ) {
     	log.debug "killing Hues"
     	offSwitches.off()
-	}
+    }
     
     if ( onSwitches ) {
     	log.debug "restoring Hues"
@@ -81,4 +82,9 @@ def powerOn(evt) {
     		onSwitches.on()
         }    
     }
+    
+    if ( onAllwaysSwitches ) {
+    	log.debug "Always turn on"
+    	onAllwaysSwitches.on()
+	}
 }
